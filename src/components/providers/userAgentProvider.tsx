@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   createContext,
@@ -6,48 +6,40 @@ import {
   useMemo,
   useState,
   ReactNode,
-  useEffect,
-} from "react";
+} from "react"
 
 const CONTEXT_ERROR =
-  "useUserAgentContext must be used within a UserAgentProvider";
+  "useUserAgentContext must be used within a UserAgentProvider"
 
-type UserAgent = string;
+type UserAgent = string
 
 type UserAgentContextType = {
-  userAgent: UserAgent | undefined;
-  setUserAgent: (userAgent: UserAgent | undefined) => void;
-};
+  userAgent: UserAgent
+  setUserAgent: (userAgent: UserAgent) => void
+}
 
 type UserAgentProviderProps = {
-  children: ReactNode;
-  userAgent?: UserAgent;
-};
+  children: ReactNode
+  userAgent: UserAgent
+}
 
 const UserAgentContext = createContext<UserAgentContextType | undefined>(
   undefined
-);
+)
 
 export const useUserAgentContext = (): UserAgentContextType => {
-  const context = useContext(UserAgentContext);
+  const context = useContext(UserAgentContext)
   if (context === undefined) {
-    throw new Error(CONTEXT_ERROR);
+    throw new Error(CONTEXT_ERROR)
   }
-  return context;
-};
+  return context
+}
 
 export const UserAgentProvider: React.FC<UserAgentProviderProps> = ({
   children,
-  userAgent: userAgentProp,
+  userAgent: initialUserAgent,
 }) => {
-  const [userAgent, setUserAgent] = useState<UserAgent | undefined>(
-    userAgentProp
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    setUserAgent(window.navigator.userAgent);
-  }, []);
+  const [userAgent, setUserAgent] = useState<UserAgent>(initialUserAgent)
 
   const value = useMemo<UserAgentContextType>(
     () => ({
@@ -55,11 +47,11 @@ export const UserAgentProvider: React.FC<UserAgentProviderProps> = ({
       setUserAgent,
     }),
     [userAgent]
-  );
+  )
 
   return (
     <UserAgentContext.Provider value={value}>
       {children}
     </UserAgentContext.Provider>
-  );
-};
+  )
+}
