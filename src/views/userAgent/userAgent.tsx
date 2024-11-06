@@ -1,10 +1,16 @@
 "use client";
 
 import { BackToHome } from "@/components/backToHome/backToHome";
-import { useUserAgentContext } from "@/components/providers/userAgentProvider";
+import { UserAgentProvider, useUserAgentContext } from "@/components/providers/userAgentProvider";
+import { useEffect } from "react";
 
-export const UserAgent = () => {
-  const { userAgent } = useUserAgentContext();
+const UserAgent = () => {
+  const { userAgent, setUserAgent } = useUserAgentContext()
+
+  useEffect(() => {
+    setUserAgent(window.navigator.userAgent)
+  }, [setUserAgent])
+
 
   return (
     <div>
@@ -22,3 +28,12 @@ export const UserAgent = () => {
     </div>
   );
 };
+
+
+export default function UserAgentDisplay({ initialUserAgent }: { initialUserAgent: string }) {
+  return (
+    <UserAgentProvider userAgent={initialUserAgent}>
+      <UserAgent />
+    </UserAgentProvider>
+  )
+}
