@@ -1,12 +1,16 @@
+import { headers } from "next/headers";
 import { UserAgentProvider } from "../components/providers/userAgentProvider";
 import "./globals.css";
 import { Layout } from "@/components/layout";
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const headersList = headers()
+  const userAgent = headersList.get('user-agent') ?? 'Unknown'
+
   return (
     <html lang="en">
       <body>
-        <UserAgentProvider>
+        <UserAgentProvider userAgent={userAgent}>
           <Layout>{children}</Layout>
         </UserAgentProvider>
       </body>
